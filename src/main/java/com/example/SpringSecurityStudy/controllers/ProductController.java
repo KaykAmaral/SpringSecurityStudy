@@ -1,5 +1,6 @@
 package com.example.SpringSecurityStudy.controllers;
 
+import com.example.SpringSecurityStudy.dto.ProductRequestDTO;
 import com.example.SpringSecurityStudy.model.Product;
 import com.example.SpringSecurityStudy.services.ProductService;
 import jakarta.validation.Valid;
@@ -21,9 +22,9 @@ public class ProductController {
     private ProductService service;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
-        Product newProduct = service.save(product);
-        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequestDTO data) {
+        Product newProduct = service.saveProduct(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @RequestMapping

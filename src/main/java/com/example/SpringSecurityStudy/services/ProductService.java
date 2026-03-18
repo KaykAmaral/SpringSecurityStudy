@@ -1,5 +1,6 @@
 package com.example.SpringSecurityStudy.services;
 
+import com.example.SpringSecurityStudy.dto.ProductRequestDTO;
 import com.example.SpringSecurityStudy.model.Product;
 import com.example.SpringSecurityStudy.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,13 @@ public class ProductService {
     @Autowired
     private ProductRepository repo;
 
-    public Product save(Product product) {
-        if (product.getPrice().doubleValue() <= 0) throw new RuntimeException("The price can't be zero or negative");
+    public Product saveProduct(ProductRequestDTO data) {
+        Product product = new Product();
+        product.setName(data.name());
+        product.setDescription(data.description());
+        product.setPrice(data.price());
+        product.setStockQuantity(data.stockQuantity());
+
         return repo.save(product);
     }
 
