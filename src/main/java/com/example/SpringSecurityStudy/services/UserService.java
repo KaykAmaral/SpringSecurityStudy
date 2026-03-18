@@ -1,7 +1,10 @@
 package com.example.SpringSecurityStudy.services;
 
+import com.example.SpringSecurityStudy.dto.UserRequestDTO;
+import com.example.SpringSecurityStudy.dto.UserResponseDTO;
 import com.example.SpringSecurityStudy.model.User;
 import com.example.SpringSecurityStudy.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +16,15 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public User saveUser(User user) {
-        // I'll make the encoder here (BCrypt)
-        return repo.save(user);
+    public UserResponseDTO saveUser(@Valid UserRequestDTO data) {
+
+        User user = new User();
+        user.setName(data.name());
+        user.setEmail(data.email());
+        user.setPassword(data.password()); // I'll make the encoder here (BCrypt)
+
+        repo.save(user);
+        return new  UserResponseDTO(user);
     }
 
     public List<User> findAll() {
