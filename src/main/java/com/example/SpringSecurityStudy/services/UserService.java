@@ -6,26 +6,18 @@ import com.example.SpringSecurityStudy.model.User;
 import com.example.SpringSecurityStudy.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repo;
-
-    public UserResponseDTO saveUser(@Valid UserRequestDTO data) {
-
-        User user = new User();
-        user.setName(data.name());
-        user.setEmail(data.email());
-        user.setPassword(data.password()); // I'll make the encoder here (BCrypt)
-
-        repo.save(user);
-        return new  UserResponseDTO(user);
-    }
 
     public List<User> findAll() {
         return repo.findAll();
@@ -37,6 +29,11 @@ public class UserService {
 
     public void deleteUser(Integer id) {
         repo.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repo.findByEmail(username);
     }
 
 }
